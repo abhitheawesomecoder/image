@@ -1,5 +1,5 @@
   <!-- FOOTER -->
-  @if (Auth::check()) 
+  @if (Auth::check())
   <div class="footer">
   @else
   <div class="footer navbar-fixed-bottom">
@@ -12,11 +12,11 @@
            <ul>
             <li> <img src="http://www.imagemarker.com/apps/icons/logo2.png" alt=""><p>
          </li>
-         
+
           </ul>
         </div>
         <div class="col-sm-6 col-md-2 lj-footer-menu">
-          
+
 		  <ul>
             <li><a href="https://www.facebook.com/imagemarker.de" target="blank">Facebook</a></li>
             <li><a href="https://twitter.com/imagemarker" target="blank">Twitter</a></li>

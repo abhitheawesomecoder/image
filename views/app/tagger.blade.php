@@ -6,7 +6,7 @@
 @if($action != 'code')
 <link href="{{ url() }}/assets/styles/imgshop.css" rel="stylesheet">
     <section id="tagger-ctrl">
-        
+
         <div class="panel panel-default">
             <div class="panel-toolbar clearfix">
                 <h3 class="pull-left padding-xs no-margin">
@@ -14,21 +14,21 @@
                     @if(Auth::user()->premium == 0)
 
                      <img src="icons/tag.png"> <b>Interaktiver</b> Editor (Basic) <a href="http://www.imagemarker.com/help.html" target="blank"><img src="icons/hilfe.png" border="0"></a>
-              
+
 
                     @elseif(Auth::user()->premium == 1)
 
                      <img src="icons/tag.png"> <b>Interaktiver</b> Editor (Premium) <a href="http://www.imagemarker.com/help.html" target="blank"><img src="icons/hilfe.png" border="0"></a>
-              
+
 
                     @else(Auth::user()->premium == 2)
 
                      <img src="icons/tag.png"> <b>Interaktiver</b> Editor (Premium) <a href="http://www.imagemarker.com/help.html" target="blank"><img src="icons/hilfe.png" border="0"></a>
-              
+
 
                     @endif
 
-                    
+
                 </h3>
 
                 <div class="pull-right">
@@ -86,10 +86,10 @@
                     </div>
                 </div>
             </div>
-		
+
         </div>
 
-    
+
         @include("app.partials.handlebar-templates")
         @include("app.partials.public-url-modal")
 
@@ -114,7 +114,7 @@
                         <i class="fa fa-globe"></i>&nbsp; Bildvorschau
                     </a>
 
-                    
+
 
                     <!--<a class="btn btn-primary"
                        href="{{ $image->url }}">
@@ -132,23 +132,23 @@
             </div>
 
             <div class="panel-body">
-              
+
                 <div id="tag-image-container">
                         @include("app.partials.tagger-code-modal")
 
                     <div id="tag-image-holder" style="margin: 0; float: left; max-width: 780px; display: none;">
                         <img src="{{ $image->url }}" id="tag-image"/>
-                     
+
                     </div>
                 </div>
-        
+
         </div>
         @include("app.partials.handlebar-templates")
 
     </section>
 @endif
 @overwrite
- 
+
 @section("styles:end")
 <style>
 @foreach($tags_icons as $icon)
@@ -187,4 +187,3 @@
     @endforeach
     </script>
 @stop
-

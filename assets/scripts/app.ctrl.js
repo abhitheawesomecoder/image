@@ -10,7 +10,7 @@ App.controller('dashboard-ctrl', function (ctrl) {
     window.line.redraw();
   });
 
-  appdat = App.get('impressions');  
+  appdat = App.get('impressions');
 
   if(appdat.length == 0 ) {
 
@@ -41,7 +41,7 @@ App.controller('dashboard-ctrl', function (ctrl) {
     resize: true,
     redraw: true
   });
-  
+
   }
 
 
@@ -54,7 +54,7 @@ App.controller('listing-ctrl', function (ctrl) {
   $ctrl.on('click', '.tag-delete-btn', function (e) {
         e.preventDefault();
           if(confirm('Inhalt wirklich löschen?')) {
-            var id = $(this).attr('data-product-id');          
+            var id = $(this).attr('data-product-id');
 
              window.location = App.get('base_url') + '/delete-list/'+id;
 
@@ -62,7 +62,7 @@ App.controller('listing-ctrl', function (ctrl) {
 
 
           }
-   
+
  });
 
 
@@ -88,7 +88,7 @@ App.controller('images-ctrl', function (ctrl) {
         });
       });
     } else {
-      
+
     }
 
     return false;
@@ -98,7 +98,7 @@ App.controller('images-ctrl', function (ctrl) {
 
 App.controller('creator-ctrl', function (ctrl) {
 
-  $("#input-button-image").change(function(){   
+  $("#input-button-image").change(function(){
 
       imgsize = this.files[0].size;
 
@@ -137,7 +137,7 @@ App.controller('tagger-ctrl', function (ctrl) {
    */
     $('.panel-body').on({
         mouseenter: function () {
-              $(".image-product").hide();            
+              $(".image-product").hide();
         }
     });
 
@@ -147,29 +147,59 @@ App.controller('tagger-ctrl', function (ctrl) {
               $(this).next().show();
         }
     }, ".tag-image-marker");
-  var placeTag = function (id, color, posX, posY, product) {
-
+  var placetempTag = function(id, color, posX, posY){
+    $("#temp-tag").remove();
     if(color == ' 1') {
-      def_color = ' blue';  
+      def_color = ' blue';
     }
     else if(color == ' 2') {
-      def_color = ' black';     
+      def_color = ' black';
     }
     else if(color == ' 3') {
-      def_color = ' green';  
+      def_color = ' green';
     }
     else if(color == ' 4') {
-      def_color = ' yellow';   
+      def_color = ' yellow';
     }
     else if(color == ' 5') {
-      def_color = ' red';   
+      def_color = ' red';
     }
     else {
       def_color = color;
     }
 
     var $marker = $('<a />', {
-      class: 'tag-image-marker'+def_color    
+      class: 'tag-image-marker'+def_color,
+      id: 'temp-tag'
+    }).data('tag-id', id).css({
+      left: $tagImage.offset().left + parseInt((posX * $tagImage.width()) / oW) + 'px',
+      top: $tagImage.offset().top + parseInt((posY * $tagImage.height()) / oH) + 'px'
+    });
+    $('body').append($marker);
+  }
+  var placeTag = function (id, color, posX, posY, product) {
+
+    if(color == ' 1') {
+      def_color = ' blue';
+    }
+    else if(color == ' 2') {
+      def_color = ' black';
+    }
+    else if(color == ' 3') {
+      def_color = ' green';
+    }
+    else if(color == ' 4') {
+      def_color = ' yellow';
+    }
+    else if(color == ' 5') {
+      def_color = ' red';
+    }
+    else {
+      def_color = color;
+    }
+
+    var $marker = $('<a />', {
+      class: 'tag-image-marker'+def_color
     }).data('tag-id', id).css({
       // Position X & Y are saved relative to original image sizes
       // since the tagger image is resized, we have to calculate a new posX and posY
@@ -179,7 +209,7 @@ App.controller('tagger-ctrl', function (ctrl) {
     });
 
     var $markerproduct = $('<div />', {
-      class: 'image-product'     
+      class: 'image-product'
     }).css({
       // Position X & Y are saved relative to original image sizes
       // since the tagger image is resized, we have to calculate a new posX and posY
@@ -189,10 +219,10 @@ App.controller('tagger-ctrl', function (ctrl) {
     });
 
 /*******************************/
-  
+
 
      var imageData = App.get('image');
-     var imageTags = imageData.tags;    
+     var imageTags = imageData.tags;
 
      var code = Handlebars.compile($tagCtrl.find('#tpl-tagger-code').html())({
                 image: imageData,
@@ -206,7 +236,7 @@ App.controller('tagger-ctrl', function (ctrl) {
     $markerproduct.append(code);
 
 /*******************************/
-   
+
 
     Handlebars.compile($tagCtrl.find('#tpl-code').html())({
               image: App.get('tagger_image'),
@@ -215,8 +245,8 @@ App.controller('tagger-ctrl', function (ctrl) {
               base_url: App.get('base_url')
     });
 
-    $('body').append($marker);     
-    $('body').append($markerproduct); 
+    $('body').append($marker);
+    $('body').append($markerproduct);
 
      $marker.next().find('.pcloseButton').on('click', function () {
       if (confirm('Möchten Sie diese Markierung wirklich löschen?')) {
@@ -257,7 +287,7 @@ App.controller('tagger-ctrl', function (ctrl) {
 	        FR.onload = function(e) {
 	        	localStorage.removeItem("base64-image");
 	            localStorage.setItem("base64-image", e.target.result);
-	        };       
+	        };
 	        FR.readAsDataURL( input.files[0] );
 	    }
 	}
@@ -285,8 +315,8 @@ App.controller('tagger-ctrl', function (ctrl) {
                      });
                 });
 
-                
-	        };       
+
+	        };
 	        FR.readAsDataURL( input.files[0] );
 	    }
 	}
@@ -304,7 +334,7 @@ App.controller('tagger-ctrl', function (ctrl) {
 
 		readIcon( this );
 
-	
+
 
 	});
 
@@ -344,7 +374,7 @@ App.controller('tagger-ctrl', function (ctrl) {
       var $inputButton = $tagModal.find('#input-button-name');
       var product_yt = YouTubeGetID($inputYoutubeVideo.val());
 
-      
+
       // Calculate clicked positions (x & y) in relation to original image sizes.
       var x = oW * parseInt(document.getElementById('pageX').value - $tagImage.offset().left - 5) / $tagImage.width();
       var y = oH * parseInt(document.getElementById('pageY').value - $tagImage.offset().top - 5) / $tagImage.height();
@@ -360,7 +390,7 @@ App.controller('tagger-ctrl', function (ctrl) {
 
         if(products_free_limit == 'unlimited' || products_free_limit < data.free_max_products) {
           if($inputTitle.val() !== '') {
-          
+
             if(YouTubeGetID($inputYoutubeVideo.val()) == '') { var product_yt = ''; } else { var product_yt = YouTubeGetID($inputYoutubeVideo.val()); }
             $.ajax({
               url: App.get('base_url') + '/ajax/tag-image',
@@ -382,6 +412,7 @@ App.controller('tagger-ctrl', function (ctrl) {
                 product_id: parseInt($(this).data('product-id'))
               }
             }).done(function (res) {
+              $("#temp-tag").remove();
               if (res.data) {
                 tags.push(res.data);
 
@@ -407,7 +438,7 @@ App.controller('tagger-ctrl', function (ctrl) {
               }
             });
 
-            $tagModal.data('modal', null);           
+            $tagModal.data('modal', null);
 
           } else {
             alert("Bitte geben Sie weitere Informationen ein.");
@@ -601,11 +632,15 @@ App.controller('tagger-ctrl', function (ctrl) {
     document.getElementById('pageX').value = e.pageX;
     document.getElementById('pageY').value = e.pageY;
 
+    var x = oW * parseInt(document.getElementById('pageX').value - $tagImage.offset().left - 5) / $tagImage.width();
+    var y = oH * parseInt(document.getElementById('pageY').value - $tagImage.offset().top - 5) / $tagImage.height();
+
+    placetempTag(1, ' i8', x, y);
 
     // Display the modal
     $("#modal-body").css('display', 'block');
     $("#modal-body-test").css('display', 'none');
-     
+
     $('.color-n').click(function() {
 
       $("#iconselect").val(1);
@@ -934,7 +969,7 @@ App.controller('image-ctrl', function (ctrl) {
 
   var imageData = App.get('image');
   var imageTags = imageData.tags;
-  
+
   var code = Handlebars.compile($ctrl.find('#tpl-code').html())({
     image: imageData,
     tags_icons: App.get('tags_icons'),
