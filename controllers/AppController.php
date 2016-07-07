@@ -51,16 +51,16 @@ class AppController extends BaseController
                     ->withErrors($validator->errors());
             }
 
-          
+
 
 
             if (Auth::attempt($credentials, Request::has('remember_me'))) {
 
-                // check if membership expired 
+                // check if membership expired
  $user = User::where('id',Auth::user()->id)->where('premium_expire_date','>',Carbon::now()->toDateTimeString())->first();
- 
+
  if($user){ $user->premium = 0; $user->save(); }
-            
+
 
                 return Redirect::route('app.dashboard');
             }
@@ -160,7 +160,7 @@ class AppController extends BaseController
 
             // Login User
             Auth::login($user);
-            
+
             return Redirect::route('app.dashboard');
         }
     }
@@ -175,7 +175,7 @@ class AppController extends BaseController
             $message->from('info@imagemarker.com', 'ImageMarker');
             $message->to($user->email, $user->username)->subject('Ihre Anmeldung auf ImageMarker');
         });
-            
+
         return Redirect::route('app.dashboard');
     }
 
@@ -200,7 +200,7 @@ class AppController extends BaseController
                 $user_update->premium = 0;
                 $user_update->premium_expire_date = '';
                 $user_update->save();
-                
+
             }
         }
 
@@ -322,14 +322,14 @@ class AppController extends BaseController
             'products' => $products
         ]);
     }
-    
+
 
     public function deleteList($id)
     {
           $tag = Tag::where("product_id",$id)->delete();
 
           $product = Product::find($id);
-          $product->delete();         
+          $product->delete();
 
 
           return Redirect::back();
@@ -375,7 +375,7 @@ class AppController extends BaseController
             if (!$validator->fails()) {
 
                 if(Input::get('price') != '') { if(is_numeric(str_replace(',', '', str_replace('.', '', Input::get('price'))))) { $price = Input::get('price'); } else { $price = 0; } } else { $price = 0; }
-            
+
                 $product->title        = Input::get('title');
                 $product->description  = Input::get('description');
                 $product->price        = $price;
@@ -399,14 +399,14 @@ class AppController extends BaseController
             // process the login
             if (!$validator->fails()) {
 
-                if(Input::get('price') != '') { 
-                    if(is_numeric(str_replace(',', '', str_replace('.', '', Input::get('price'))))) { 
-                        $price = Input::get('price'); 
-                    } else { 
-                        $price = 0; 
-                    } 
-                } else { 
-                    $price = 0; 
+                if(Input::get('price') != '') {
+                    if(is_numeric(str_replace(',', '', str_replace('.', '', Input::get('price'))))) {
+                        $price = Input::get('price');
+                    } else {
+                        $price = 0;
+                    }
+                } else {
+                    $price = 0;
                 }
                 //parse_str( parse_url( Input::get('youtube'), PHP_URL_QUERY ), $my_array_of_vars );
                 preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", Input::get('youtube'), $matches);
@@ -425,7 +425,7 @@ class AppController extends BaseController
             }
         } //else { return Redirect::to('listing');    }
 
-        
+
         if (Request::isMethod('post')) {
             switch (Request::input('_action')) {
                 case 'delete_image':
@@ -517,7 +517,7 @@ class AppController extends BaseController
 
         if($user->admin == '1') {
             $user = User::find($id);
-            
+
             $user->delete();
 
             return Redirect::to('users');
@@ -569,16 +569,16 @@ class AppController extends BaseController
             return Redirect::route('app.status');
         }
         $errorMessages = new MessageBag;
-        $errorMessages->add('limit', 'Sie können Bilder bis max 1MB hochladen. Bitte komprimieren Sie Ihr Bild und versuchen Sie es erneut.');               
-              
+        $errorMessages->add('limit', 'Sie können Bilder bis max 1MB hochladen. Bitte komprimieren Sie Ihr Bild und versuchen Sie es erneut.');
+
         if(Input::has("imgsize")){
               if(Input::get("imgsize") == "0"){
 
-                 return Redirect::refresh()->withErrors($errorMessages->all()); 
-                 
+                 return Redirect::refresh()->withErrors($errorMessages->all());
+
               }
         }
-      
+
 
         if (Request::isMethod('post') && Request::hasFile('image')) {
 
@@ -610,8 +610,8 @@ class AppController extends BaseController
 
                 $size = $img->filesize();
                 if($size > 1048576)
-                    return Redirect::refresh()->withErrors($errorMessages->all()); 
-                
+                    return Redirect::refresh()->withErrors($errorMessages->all());
+
 
                 if($user->premium == '0' && $user->admin == '0') {
                     // insert a watermark
@@ -666,6 +666,11 @@ class AppController extends BaseController
                 case 'delete_image':
                     DB::beginTransaction();
                     try {
+                      
+                        foreach ($image->tags() as $tag) {
+                          $tag->product()->delete();
+                        }
+
                         $image->tags()->delete();
                         $image->delete();
 
@@ -683,7 +688,7 @@ class AppController extends BaseController
             }
         }
         $fullurl = url();
-        
+
         $image = Image::find($id);
         $image->load('tags', 'tags.product');
 
@@ -783,7 +788,7 @@ class AppController extends BaseController
                 return Redirect::refresh()
                     ->with('error', 'Diese E-Mail wurde bereits verwendet');
             }
-            
+
             //Auth::user()->admin = '1';
 
             $password = Request::get('password');
@@ -823,7 +828,7 @@ class AppController extends BaseController
                         SET user_id = \'' . $user->id . '\'
                         WHERE coupon_code = \'' . $coupon_code_upgrade . '\'
                     ');
-                        
+
                     $user_update = User::where('id', $user->id)->first();
                     $user_update->premium = 1;
                     $user_update->save();
@@ -874,7 +879,7 @@ class AppController extends BaseController
             return null;
         }
 
-        
+
         $tags_icons = TagsIcons::get();
 
         return View::make('app.image', [
@@ -893,7 +898,7 @@ class AppController extends BaseController
         if($user->lock == '1') {
             return Redirect::route('app.locked');
         }
-        
+
         $type = Request::get('type');
         if (!in_array($type, ['impression', 'click'])) {
             return new JsonResponse([
