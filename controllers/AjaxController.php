@@ -237,7 +237,74 @@ class AjaxController extends BaseController
 
         return 'true';
     }
+    public function DisplayPremiumIcon(){
 
+      $user = Auth::user();
+
+     // $tags_icons = TagsIcons::get();
+
+     // $tags_icons = TagsIcons::where('user_id', '=', Auth::user()->id)->orwhere('user_id', '=', '0')->get();
+
+      /*if(Auth::user()->premium == 0)
+      $tags_icons = TagsIcons::where('user_id', '=', Auth::user()->id)->orwhere('user_id', '=', '0')->orderBy('order')->orderBy('id')->take(14)->get();
+      else*/
+      $tags_icons = TagsIcons::where('user_id', '=', Auth::user()->id)->orwhere('user_id', '=', '0')->orderBy('order')->orderBy('id')->get();
+
+
+      $html = '<span style="float: left; padding-right: 10px; padding-bottom: 5px; color: #000;"><b>Wählen</b> Sie ein Icon aus:</span><br><br>';
+
+         /*     <a id="color-blue" class="color-blue" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="http://imagemarker.com/apps/icons/imagemarker/blue.png"></a>
+              <a id="color-black" class="color-black" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="http://imagemarker.com/apps/icons/imagemarker/black.png"></a>
+              <a id="color-green" class="color-green" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="http://imagemarker.com/apps/icons/imagemarker/green.png"></a>
+              <a id="color-yellow" class="color-yellow" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="http://imagemarker.com/apps/icons/imagemarker/yellow.png"></a>';
+*/
+      foreach($tags_icons as $icon) {
+
+          if(Auth::user()->premium == 2){
+
+          $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
+
+          }else{
+
+            $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
+
+
+                  // if($icon->premium == '1' && Auth::user()->premium == '1' || Auth::user()->premium == '2') {
+                  //     $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
+                  // }
+                  //
+                  // if($icon->premium == '0') {
+                  //     $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
+                  // }
+                  //
+                  // if($icon->premium == '1' && Auth::user()->admin == '1' && Auth::user()->premium == '0') {
+                  //     $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
+                  // }
+              }
+
+          $html .= '<style>.tag-image-marker.i'.$icon->id.' {
+background: url("'.$icon->image.'");
+opacity: 1.0;
+width: 30px;
+height: 30px;
+background-size: 30px;
+border-radius: 0%!important;
+}</style>';
+
+  $html .= "<script>
+          $('#color-".$icon->id."').click(function() {
+            $('#color-div .active').removeClass('active');
+            $(this).toggleClass('active');
+            document.getElementById('color').value = 'i".$icon->id."';
+            document.getElementById('color').checked = true;
+          });
+          </script>";
+
+      }
+
+      return json_encode(["html" => $html]);
+
+    }
     public function UploadPremiumIcon() {
         $user = Auth::user();
         $data = Request::input();
@@ -274,7 +341,7 @@ class AjaxController extends BaseController
             }else{
 
               $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
-            
+
 
                     // if($icon->premium == '1' && Auth::user()->premium == '1' || Auth::user()->premium == '2') {
                     //     $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';

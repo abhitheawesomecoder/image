@@ -109,6 +109,25 @@ App.controller('creator-ctrl', function (ctrl) {
 });
 
 App.controller('tagger-ctrl', function (ctrl) {
+
+  URL = document.getElementById("url").value;
+  fetch(URL, {
+       method: 'post',
+       mode: 'no-cors',
+       credentials: "same-origin"
+     }).then(function(response){
+
+           return response.json();
+       })  .then(function(json){
+
+
+         $("#color-div").html(json.html);
+
+       })
+         .catch(function(error){
+
+
+         });
   /**
    $(window).resize(function () {
     // TODO: update tag positions when the window is resized

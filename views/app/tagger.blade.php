@@ -5,6 +5,7 @@
 @section("content")
 @if($action != 'code')
 <link href="{{ url() }}/assets/styles/imgshop.css" rel="stylesheet">
+<input type="hidden" id="url" value="{{ url('displaypremiumicon') }}">
     <section id="tagger-ctrl">
 
         <div class="panel panel-default">
