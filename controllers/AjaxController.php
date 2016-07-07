@@ -53,10 +53,10 @@ class AjaxController extends BaseController
             echo var_dump($image_tags);*/
 
            /* foreach ($image_tags as $key => $value) {
-               
+
                 echo var_dump($value->product_id);
-            }   */        
-            
+            }   */
+
 
           /*  $product = Product::where('id' , '=' , $img->product_id )->first();
 
@@ -69,14 +69,14 @@ class AjaxController extends BaseController
     }
     public function postRemind()
     { $type="password";
-        //validate email entered here 
+        //validate email entered here
         $rules = array(
             'email'     => 'required|email',
         );
- 
+
         $validator = \Validator::make(Input::all(), $rules);
- 
-        if ($validator->fails()) 
+
+        if ($validator->fails())
         {
             //return Redirect::to('password/remind')->withErrors($validator)->withInput(Input::except('password'));
             return json_encode(["code" => 0, "type" => $type, "error" => $validator->errors() ]);
@@ -104,10 +104,10 @@ class AjaxController extends BaseController
                 return json_encode(["code" => 0, "type" => $type, "error" => [\Lang::get($response)] ]);
             }
         }
- 
+
     }
     public function login()
-    {   $type = "login"; 
+    {   $type = "login";
         if (Request::isMethod('post')) {
             $credentials = Request::only(['username', 'password']);
 
@@ -263,27 +263,30 @@ class AjaxController extends BaseController
            /*     <a id="color-blue" class="color-blue" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="http://imagemarker.com/apps/icons/imagemarker/blue.png"></a>
                 <a id="color-black" class="color-black" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="http://imagemarker.com/apps/icons/imagemarker/black.png"></a>
                 <a id="color-green" class="color-green" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="http://imagemarker.com/apps/icons/imagemarker/green.png"></a>
-                <a id="color-yellow" class="color-yellow" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="http://imagemarker.com/apps/icons/imagemarker/yellow.png"></a>';         
+                <a id="color-yellow" class="color-yellow" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="http://imagemarker.com/apps/icons/imagemarker/yellow.png"></a>';
 */
         foreach($tags_icons as $icon) {
 
             if(Auth::user()->premium == 2){
 
             $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
-           
-            }else{  
-                          
-                    if($icon->premium == '1' && Auth::user()->premium == '1' || Auth::user()->premium == '2') {
-                        $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
-                    }
 
-                    if($icon->premium == '0') {
-                        $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
-                    }
+            }else{
 
-                    if($icon->premium == '1' && Auth::user()->admin == '1' && Auth::user()->premium == '0') {
-                        $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
-                    }
+              $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
+            
+
+                    // if($icon->premium == '1' && Auth::user()->premium == '1' || Auth::user()->premium == '2') {
+                    //     $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
+                    // }
+                    //
+                    // if($icon->premium == '0') {
+                    //     $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
+                    // }
+                    //
+                    // if($icon->premium == '1' && Auth::user()->admin == '1' && Auth::user()->premium == '0') {
+                    //     $html .= '<a id="color-'.$icon->id.'" class="color-'.$icon->id.' color-n" style="margin-left: 5px; margin-top: 5px; display: inline-block;"><img width="30" height="30" src="'.$icon->image.'"></a>';
+                    // }
                 }
 
             $html .= '<style>.tag-image-marker.i'.$icon->id.' {
@@ -316,7 +319,7 @@ class AjaxController extends BaseController
         $product = [];
 
         if($data['product_price'] != '') { if(is_numeric(str_replace('.', '', str_replace(',', '', $data['product_price'])))) { $price = $data['product_price']; } else { $price = 0; } } else { $price = 0; }
-            
+
 
         $exists = Product::where('type', '=', $data['type'])
                     ->where('title', '=', $data['product_id'])
@@ -328,7 +331,7 @@ class AjaxController extends BaseController
 
             if($data['product_price'] != '') { if(is_numeric(str_replace('.', '', str_replace(',', '', $data['product_price'])))) { $price = $data['product_price']; } else { $price = 0; } } else { $price = 0; }
             // we create a new product If product id is not passed
-                
+
                 $product = Product::create([
                     'type' => $data['type'],
                     'title' => $data['product_title'],
@@ -348,7 +351,7 @@ class AjaxController extends BaseController
 
             if($data['product_price'] != '') { if(is_numeric(str_replace('.', '', str_replace(',', '', $data['product_price'])))) { $price = $data['product_price']; } else { $price = 0; } } else { $price = 0; }
             // we create a new product If product id is not passed
-            
+
                 $product = Product::create([
                     'type' => $data['type'],
                     'youtube' => $data['product_youtube'],
@@ -365,7 +368,7 @@ class AjaxController extends BaseController
 
             if($data['product_price'] != '') { if(is_numeric(str_replace('.', '', str_replace(',', '', $data['product_price'])))) { $price = $data['product_price']; } else { $price = 0; } } else { $price = 0; }
             // we create a new product If product id is not passed
-            
+
                 $product = Product::create([
                     'type' => $data['type'],
                     'title' => $data['product_title'],
@@ -459,7 +462,7 @@ class AjaxController extends BaseController
             return new JsonResponse([
                 'data' => []
             ], 400);
-        }       
+        }
 
 
         DB::beginTransaction();
@@ -492,26 +495,26 @@ class AjaxController extends BaseController
 
       if(Request::has('url')){
 
-        return json_encode(["code" => 0 , "msg" => ""]); 
+        return json_encode(["code" => 0 , "msg" => ""]);
 
        }
 
        if(!Request::has('name')){
 
-        return json_encode(["code" => 0 , "msg" => Config::get('contact.errorname')]); 
+        return json_encode(["code" => 0 , "msg" => Config::get('contact.errorname')]);
 
        }
 
        if(!Request::has('email')){
 
-        return json_encode(["code" => 0 , "msg" => Config::get('contact.erroremail')]); 
-        
+        return json_encode(["code" => 0 , "msg" => Config::get('contact.erroremail')]);
+
        }
 
        if(!Request::has('message')){
 
-        return json_encode(["code" => 0 , "msg" => Config::get('contact.errormessage')]); 
-        
+        return json_encode(["code" => 0 , "msg" => Config::get('contact.errormessage')]);
+
        }
        $name = Request::get('name');
 
@@ -520,7 +523,7 @@ class AjaxController extends BaseController
        $mess = Request::get('message');
 
         Mail::send('emails.contact', array('mess' => $mess), function($message)
-        {           
+        {
             $message->from( Request::get('email'), Request::get('name'));
             $message->to(Config::get('contact.email'),"ImageMarker" )->subject('Contact Us');
         });
