@@ -666,8 +666,8 @@ class AppController extends BaseController
                 case 'delete_image':
                     DB::beginTransaction();
                     try {
-                      
-                        foreach ($image->tags() as $tag) {
+
+                        foreach ($image->tags as $tag) {
                           $tag->product()->delete();
                         }
 

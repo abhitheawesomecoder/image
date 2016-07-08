@@ -41,6 +41,17 @@ class AjaxController extends BaseController
         $this->setupService = $setupService;
     }
     public function test123(){
+
+      // $image = Image::find(515);
+      //
+      // return var_dump($image->tags);
+      //
+      // foreach ($image->tags()->get() as  $tag) {
+      //   return var_dump($tag);
+      // }
+
+
+
 /*
            $image = Image::find(378);
 
