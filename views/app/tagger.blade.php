@@ -3,9 +3,10 @@
 @section("page_title", "Interaktiver Editor")@stop
 
 @section("content")
+<input type="hidden" id="url" value="{{ url('displaypremiumicon') }}">
 @if($action != 'code')
 <link href="{{ url() }}/assets/styles/imgshop.css" rel="stylesheet">
-<input type="hidden" id="url" value="{{ url('displaypremiumicon') }}">
+
     <section id="tagger-ctrl">
 
         <div class="panel panel-default">

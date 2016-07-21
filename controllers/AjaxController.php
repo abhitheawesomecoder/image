@@ -36,6 +36,7 @@ class AjaxController extends BaseController
      *
      * @return \Illuminate\View\View
      */
+
     public function __construct(SetupService $setupService)
     {
         $this->setupService = $setupService;
@@ -84,8 +85,10 @@ class AjaxController extends BaseController
         $rules = array(
             'email'     => 'required|email',
         );
-
-        $validator = \Validator::make(Input::all(), $rules);
+        $messages = array(
+              'required' => 'Please enter your :attribute.',
+          );
+        $validator = \Validator::make(Input::all(), $rules, $messages);
 
         if ($validator->fails())
         {
@@ -121,11 +124,13 @@ class AjaxController extends BaseController
     {   $type = "login";
         if (Request::isMethod('post')) {
             $credentials = Request::only(['username', 'password']);
-
+            $messages = array(
+                  'required' => 'Please enter your :attribute.',
+              );
             $validator = \Validator::make($credentials, [
                 'username' => 'required',
                 'password' => 'required'
-            ]);
+            ],$messages);
 
             if ($validator->fails()) {
                 //return Redirect::route('app.login')->withErrors($validator->errors());
@@ -140,7 +145,7 @@ class AjaxController extends BaseController
             }
 
             //return Redirect::route('app.login')->withInput()->withErrors(['Benutzername oder Passwort sind falsch!']);
-            return json_encode(["code" => 0, "type" => $type, "error" => ['Benutzername oder Passwort sind falsch!'] ]);
+            return json_encode(["code" => 0, "type" => $type, "error" => ['Username or password is incorrect !'] ]);
         }
 
         //return View::make('app.login');
@@ -150,13 +155,19 @@ class AjaxController extends BaseController
     public function register()
     {   $type = "register";
         if (Request::isMethod('post')) {
-            $credentials = Request::only(['username', 'password', 'email']);
 
+            $credentials = Request::only(['username', 'password', 'email']);
+            $messages = array(
+                  'required' => 'Please enter your :attribute.',
+                  'password.min' => 'Password is too short',
+                  'username.unique' => 'Username already taken. Please choose another Username.',
+                  'email.unique' => 'Email address is already in use.'
+              );
             $validator = \Validator::make($credentials, [
-                'username' => 'required|min:5',
-                'password' => 'required',
-                'email' => 'required'
-            ]);
+                'username' => 'required|unique:users|min:5',
+                'password' => 'required|min:5',
+                'email' => 'required|unique:users'
+            ],$messages);
 
             if ($validator->fails()) {
               //  return Redirect::route('app.register')->withErrors($validator->errors());
